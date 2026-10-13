@@ -57,7 +57,7 @@
   }
   document.getElementById('playButton').addEventListener('click', () => {
     if (playing) { stop(); return; } playing = true; document.getElementById('playButton').textContent = 'Ⅱ Pause';
-    timer = setInterval(() => advance(1), 1200 - Number(document.getElementById('speed').value) * 100);
+    timer = setInterval(() => advance(1), 900 - Number(document.getElementById('speed').value) * 80);
   });
   document.getElementById('stepButton').addEventListener('click', () => advance(1));
   document.getElementById('backButton').addEventListener('click', () => advance(-1));
