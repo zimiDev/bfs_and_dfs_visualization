@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f7fb">
+  <title>BFS &amp; DFS Lab</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div><p class="eyebrow">ALGORITHM LAB</p><h1>BFS <span>&amp;</span> DFS</h1></div>
+    <div class="global-controls" aria-label="Visualizer controls">
+      <button id="playButton" aria-label="Play or pause">▶ Play</button><button id="stepButton" aria-label="Step forward">Step ▷</button><button id="backButton" aria-label="Step backward">◁ Back</button><button id="resetButton" aria-label="Reset visualization">Reset</button>
+      <label class="speed-control">Speed <input id="speed" type="range" min="1" max="10" value="8" aria-label="Animation speed"></label>
+      <label>Mode <select id="runMode"><option value="sync">Run both in sync</option><option value="independent">Run independently</option></select></label>
+      <label>Preset <select id="presetSelect" aria-label="Choose grid preset"></select></label>
+      <button id="editButton" aria-pressed="false">Edit grid</button><button id="themeButton" aria-label="Toggle dark theme">◐</button>
+    </div>
+  </header>
+  <main>
+    <nav class="tabs" aria-label="Learning modes"><button class="tab active" data-tab="visualizer">Visualizer</button><button class="tab" data-tab="game">Be the algorithm</button></nav>
+    <section id="visualizerView">
+      <div class="learning-card"><div class="ripple" aria-hidden="true">◎</div><div><h2>Two ways to explore a maze</h2><p><strong>BFS</strong> spreads like ripples: it checks every cell one move away, then two. The first route it finds is shortest. <strong>DFS</strong> walks one branch as far as it can, then backtracks; its first route may be longer.</p></div></div>
+      <div class="legend" aria-label="Grid legend"><span title="Where exploration begins"><i class="swatch start">S</i> Start</span><span title="The destination"><i class="swatch goal">⚑</i> Goal</span><span title="Cannot be entered"><i class="swatch wall"></i> Wall</span><span title="Waiting to be explored"><i class="swatch frontier"></i> Frontier</span><span title="Already explored"><i class="swatch visited"></i> Explored</span><span title="Route recovered from parent links"><i class="swatch path"></i> Path</span></div>
+      <div class="options"><label><input id="showTrails" type="checkbox"> Show every path explored</label><label><input id="showParents" type="checkbox"> Show parent arrows</label><label><input id="predictMode" type="checkbox"> Predict the next cell</label><button id="randomMazeButton">Random maze</button><button id="resetGridButton">Reset grid</button><span id="editHint" hidden>Click or drag empty cells to add/remove walls. Drag S/G to move them.</span></div>
+      <div class="panels"><article class="algorithm-panel bfs-panel" id="bfsPanel"><header><div><p class="eyebrow">FIRST IN, FIRST OUT</p><h2>Breadth-first search <span class="badge">BFS · QUEUE</span></h2></div></header><div class="grid-wrap"><div class="grid" id="bfsGrid" aria-label="BFS grid"></div></div><div class="frontier-area"><h3>Queue <small>oldest leaves first</small></h3><div class="frontier queue" id="bfsFrontier"></div><div class="frontier-labels"><span>FRONT · next out</span><span>BACK · new in</span></div></div><p class="live-message" id="bfsMessage" aria-live="polite"></p><div class="stats" id="bfsStats"></div><details class="code-details"><summary>See the algorithm code</summary><pre id="bfsCode"></pre></details></article>
+        <article class="algorithm-panel dfs-panel" id="dfsPanel"><header><div><p class="eyebrow">LAST IN, FIRST OUT</p><h2>Depth-first search <span class="badge">DFS · STACK</span></h2></div></header><div class="grid-wrap"><div class="grid" id="dfsGrid" aria-label="DFS grid"></div></div><div class="frontier-area"><h3>Stack <small>newest leaves first</small></h3><div class="frontier stack" id="dfsFrontier"></div><div class="frontier-labels"><span>TOP · next out</span><span>BOTTOM</span></div></div><p class="live-message" id="dfsMessage" aria-live="polite"></p><div class="stats" id="dfsStats"></div><details class="code-details"><summary>See the algorithm code</summary><pre id="dfsCode"></pre></details></article></div>
+      <section id="comparison" class="comparison" hidden></section>
+    </section>
+    <section id="gameView" hidden><div class="game-intro"><div><p class="eyebrow">YOUR TURN TO SEARCH</p><h2>Be the algorithm</h2><p>Choose a search rule, then click the next cell that should leave its queue or stack.</p></div><div class="game-controls"><label>Algorithm <select id="gameAlgorithm"><option value="bfs">BFS · Queue</option><option value="dfs">DFS · Stack</option></select></label><label>Difficulty <select id="gameDifficulty"><option value="small">Small grid</option><option value="default">Reference grid</option><option value="large">Large grid</option></select></label><button id="gameStart">Start game</button><button id="hintButton">Hint</button></div></div><div class="game-layout"><div id="gameGrid" class="grid game-grid" aria-label="Game grid"></div><aside class="game-sidebar"><div class="score-card"><span>SCORE</span><strong id="score">0</strong></div><h3 id="gameFrontierTitle">Queue · next out</h3><div id="gameFrontier" class="frontier"></div><p id="gameMessage" aria-live="polite">Choose a difficulty and start.</p><div id="gameProgress"></div></aside></div></section>
+  </main>
+  <footer>Made to make the invisible work of search visible.</footer>
+  <script src="algorithms.js"></script><script src="presets.js"></script><script src="editor.js"></script><script src="visualizer.js"></script><script src="game.js"></script>
+</body>
+</html>
