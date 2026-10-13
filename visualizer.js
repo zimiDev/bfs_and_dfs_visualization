@@ -25,14 +25,21 @@
     const state = states[name]; if (!state) return;
     state.index = Math.max(0, Math.min(requestedIndex, state.result.steps.length - 1));
     const frame = state.result.steps[state.index];
-    const gridEl = document.getElementById(`${name}Grid`); gridEl.innerHTML = '';
+    const gridEl = document.getElementById(`${name}Grid`);
     gridEl.style.gridTemplateColumns = `repeat(${state.grid[0].length}, auto)`;
+    const cellCount = state.grid.length * state.grid[0].length;
+    if (gridEl.children.length !== cellCount) {
+      gridEl.replaceChildren(...Array.from({ length: cellCount }, () => document.createElement('div')));
+    }
+    const activePop = state.result.steps.slice(0, state.index + 1).reverse().find((step) => step.type === 'pop');
+    let cellIndex = 0;
     state.grid.forEach((row, r) => row.forEach((value, c) => {
-      const k = `${r},${c}`, cell = document.createElement('div'); cell.className = `cell ${cellClass(state, r, c, frame)}`; cell.dataset.row = r; cell.dataset.col = c;
+      const k = `${r},${c}`, cell = gridEl.children[cellIndex++]; cell.className = `cell ${cellClass(state, r, c, frame)}`; cell.dataset.row = r; cell.dataset.col = c;
+      if (activePop && key(activePop.cell) === k) cell.classList.add('current');
       cell.setAttribute('aria-label', `${value === 'S' ? 'Start' : value === 'G' ? 'Goal' : value === 'X' ? 'Wall' : 'Cell'} row ${r + 1}, column ${c + 1}${state.result.order[k] ? `, explored ${state.result.order[k]}` : ''}`);
       const glyph = value === 'S' ? 'S' : value === 'G' ? '⚑' : value === 'X' ? '' : '';
-      cell.innerHTML = `${glyph ? `<span class="glyph">${glyph}</span>` : ''}${state.result.order[k] ? `<span class="order">${state.result.order[k]}</span>` : ''}${name === 'bfs' && state.result.distance[k] !== undefined ? `<span class="distance">d${state.result.distance[k]}</span>` : ''}`;
-      gridEl.appendChild(cell);
+      const contents = `${glyph ? `<span class="glyph">${glyph}</span>` : ''}${state.result.order[k] ? `<span class="order">${state.result.order[k]}</span>` : ''}${name === 'bfs' && state.result.distance[k] !== undefined ? `<span class="distance">d${state.result.distance[k]}</span>` : ''}`;
+      if (cell.innerHTML !== contents) cell.innerHTML = contents;
     }));
     const frontier = document.getElementById(`${name}Frontier`); frontier.replaceChildren();
     frame.frontier.forEach((item) => { const chip = document.createElement('span'); chip.className = 'frontier-item'; chip.textContent = `(${item[0]},${item[1]})`; frontier.appendChild(chip); });
@@ -57,7 +64,7 @@
   }
   document.getElementById('playButton').addEventListener('click', () => {
     if (playing) { stop(); return; } playing = true; document.getElementById('playButton').textContent = 'Ⅱ Pause';
-    timer = setInterval(() => advance(1), 900 - Number(document.getElementById('speed').value) * 80);
+    timer = setInterval(() => advance(1), 1100 - Number(document.getElementById('speed').value) * 80);
   });
   document.getElementById('stepButton').addEventListener('click', () => advance(1));
   document.getElementById('backButton').addEventListener('click', () => advance(-1));
